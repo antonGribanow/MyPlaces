@@ -9,12 +9,20 @@ import UIKit
 
 class NewPlaceViewController: UITableViewController {
 
-    @IBOutlet var imageOfPlace: UIImageView!
+    @IBOutlet var placeImage: UIImageView!
+    
+    @IBOutlet var saveButton: UIBarButtonItem!
+    @IBOutlet var placeName: UITextField!
+    @IBOutlet var placeLocanion: UITextField!
+    @IBOutlet var placeType: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         tableView.tableFooterView = UIView() // удалене линеек для пустых строк
+        saveButton.isEnabled = false //przycisk Save jest dostępny tylko wtedy, jak uest wypełnione pole Name
+        
+        placeName.addTarget(self, action: #selector(textFieldChange), for: .editingChanged)
     }
     
     // MARK: Table view delegate
@@ -64,6 +72,14 @@ extension NewPlaceViewController: UITextFieldDelegate {  //Hiding keyboard after
         return true
     }
     
+    @objc private func textFieldChange() {
+        if placeName.text?.isEmpty == false {
+            saveButton.isEnabled = true
+        }else{
+            saveButton.isEnabled = false
+        }
+    }
+    
 }
 
 // MARK: Work with image
@@ -82,9 +98,9 @@ extension NewPlaceViewController: UIImagePickerControllerDelegate, UINavigationC
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) { // metoda wstawia obrazek na mejsce
-        imageOfPlace.image = info[.editedImage] as? UIImage
-        imageOfPlace.contentMode = .scaleAspectFill     //masztabujemy image
-        imageOfPlace.clipsToBounds = true               //tniemy image
+        placeImage.image = info[.editedImage] as? UIImage
+        placeImage.contentMode = .scaleAspectFill     //masztabujemy image
+        placeImage.clipsToBounds = true               //tniemy image
         dismiss(animated: true)                         //zamykamy imagePickerController
     }
 }
