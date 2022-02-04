@@ -8,6 +8,9 @@
 import UIKit
 
 class NewPlaceViewController: UITableViewController {
+    
+    var newPlace: Place?
+    var imageIsChange = false
 
     @IBOutlet var placeImage: UIImageView!
     
@@ -60,8 +63,26 @@ class NewPlaceViewController: UITableViewController {
                view.endEditing(true)
            }
        }
+    
+    func saveNewPlace() {
+        
+        var image: UIImage?
+        
+        if imageIsChange{
+            image = placeImage.image
+        } else {
+            image = #imageLiteral(resourceName: "imagePlaceholder")
+        }
+        
+        newPlace = Place(name: placeName.text!, location: placeLocanion.text, type: placeType.text, image: image, restaurantImage: nil)
+    }
 
+    @IBAction func cancelAction(_ sender: Any) {
+        dismiss(animated: true)
+    }
 }
+
+
 
 // MARK: Text field delegate
 
@@ -101,6 +122,9 @@ extension NewPlaceViewController: UIImagePickerControllerDelegate, UINavigationC
         placeImage.image = info[.editedImage] as? UIImage
         placeImage.contentMode = .scaleAspectFill     //masztabujemy image
         placeImage.clipsToBounds = true               //tniemy image
+        imageIsChange = true
         dismiss(animated: true)                         //zamykamy imagePickerController
+        
+        
     }
 }
