@@ -9,7 +9,7 @@ import UIKit
 
 class NewPlaceViewController: UITableViewController {
     
-    var newPlace: Place?
+    var newPlace = Place()
     var imageIsChange = false
 
     @IBOutlet var placeImage: UIImageView!
@@ -21,6 +21,11 @@ class NewPlaceViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        DispatchQueue.main.async {  // Przy zapisywaniu w DB, głowny wątek nie blokuję się
+            self.newPlace.savePlaces()
+        }
+        
 
         tableView.tableFooterView = UIView() // удалене линеек для пустых строк
         saveButton.isEnabled = false //przycisk Save jest dostępny tylko wtedy, jak uest wypełnione pole Name
@@ -74,7 +79,7 @@ class NewPlaceViewController: UITableViewController {
             image = #imageLiteral(resourceName: "imagePlaceholder")
         }
         
-        newPlace = Place(name: placeName.text!, location: placeLocanion.text, type: placeType.text, image: image, restaurantImage: nil)
+//        newPlace = Place(name: placeName.text!, location: placeLocanion.text, type: placeType.text, image: image, restaurantImage: nil)
     }
 
     @IBAction func cancelAction(_ sender: Any) {
